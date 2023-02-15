@@ -77,9 +77,7 @@ function Login() {
     <div className="signup_container">
       <Card
         hoverable
-        style={{
-          width: 300,
-        }}
+        className="card"
       >
         <h1>Login</h1>
         <form onSubmit={ProceedLogin}>

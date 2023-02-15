@@ -37,9 +37,7 @@ function SignUp() {
     <div className="signup_container">
       <Card
         hoverable
-        style={{
-          width: 270,
-        }}
+        className="card"
       >
         <h1>SignUp</h1>
         <form onSubmit={handleSubmit}>
