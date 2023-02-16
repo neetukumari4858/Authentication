@@ -1,18 +1,17 @@
 .App {
   text-align: center;
 }
-.signup_container{
+.signup_container {
   display: flex;
   justify-content: center;
   margin: 3rem;
 }
-.button_container{
+.button_container {
   display: flex;
   justify-content: center;
   margin: 1rem;
   gap: 1rem;
-
 }
-.card{
-    width: 300rem,
+.login_container {
+  margin: 3rem;
 }

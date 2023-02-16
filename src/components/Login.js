@@ -3,7 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import { LoginSocialGoogle } from "reactjs-social-login";
 import { UseAddSignupData, FormReducers } from "./../hooks/index";
-import { Card } from "antd";
+import { Button, Form, Input, Space } from "antd";
 
 function Login() {
   const initialState = {
@@ -40,9 +40,15 @@ function Login() {
         localStorage.setItem("username", id);
       });
   };
-  const ProceedLogin = (e) => {
-    e.preventDefault();
 
+  const handleTextChange = (e) => {
+    dispatch({
+      type: "LOGIN_INPUT_TEXT",
+      field: e.target.name,
+      payload: e.target.value,
+    });
+  };
+  const onFinish = () => {
     fetch("http://localhost:8000/user/" + userName)
       .then((res) => {
         return res.json();
@@ -54,7 +60,6 @@ function Login() {
           if (password === res.password) {
             alert("you are Logged in successfuly");
             localStorage.setItem("username", userName);
-            console.log(localStorage, "local");
 
             history.push("/");
           } else {
@@ -66,73 +71,106 @@ function Login() {
         console.log(`Login Failed due to ${error.message}`);
       });
   };
-  const handleTextChange = (e) => {
-    dispatch({
-      type: "LOGIN_INPUT_TEXT",
-      field: e.target.name,
-      payload: e.target.value,
-    });
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
   };
+
   return (
-    <div className="signup_container">
-      <Card
-        hoverable
-        className="card"
+    <Space direction="vertical" size={12} className="login_container">
+      <Form
+        labelCol={{
+          span: 8,
+        }}
+        wrapperCol={{
+          span: 16,
+        }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
       >
         <h1>Login</h1>
-        <form onSubmit={ProceedLogin}>
-          <div>
-            <label>User Name</label>
-            <input
-              value={userName}
-              name="userName"
-              onChange={(e) => handleTextChange(e)}
-              placeholder="enter user name"
-            />
-          </div>
-          <div>
-            <label>Email</label>
-            <input
-              value={email}
-              name="email"
-              onChange={(e) => handleTextChange(e)}
-              placeholder="enter email"
-            />
-          </div>
-          <div>
-            <label>Password</label>
-            <input
-              value={password}
-              name="password"
-              onChange={(e) => handleTextChange(e)}
-              placeholder="enter password"
-            />
-          </div>
-          <div className="button_container">
-            <button type="submit">Login</button>
-            <button>
-              <Link to="/signup">Sign Up</Link>
-            </button>
-          </div>
-        </form>
-        <LoginSocialGoogle
-          client_id={
-            "591350337896-1l1gjhd6heqnm7d36181ihnq25uls2m4.apps.googleusercontent.com"
-          }
-          scope="openid profile email"
-          discoveryDocs="claims_supported"
-          access_type="offline"
-          onResolve={onResolveHandler}
-          onReject={(err) => {
-            console.log(err);
-          }}
+
+        <Form.Item
+          label="Username"
+          value={userName}
+          name="userName"
+          rules={[
+            {
+              required: true,
+              message: "Please enter your username!",
+            },
+          ]}
         >
-          <GoogleLoginButton />
-        </LoginSocialGoogle>
-      </Card>
-    </div>
+          <Input
+            value={userName}
+            name="userName"
+            onChange={(e) => handleTextChange(e)}
+            placeholder="Enter user name"
+          />
+        </Form.Item>
+        <Form.Item
+          label="E-mail"
+          value={email}
+          name="email"
+          rules={[
+            {
+              required: true,
+              message: "Please enter your email!",
+            },
+          ]}
+        >
+          <Input
+            value={email}
+            name="email"
+            onChange={(e) => handleTextChange(e)}
+            placeholder="Enter E-mail"
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Password"
+          value={password}
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
+        >
+          <Input.Password
+            value={password}
+            name="password"
+            onChange={(e) => handleTextChange(e)}
+            placeholder="Enter Password"
+          />
+        </Form.Item>
+        <Space>
+          <Button type="primary" htmlType="submit">
+            Login
+          </Button>
+          <Button type="button">
+            <Link to="/signup">Sign up</Link>
+          </Button>
+        </Space>
+      </Form>
+      <LoginSocialGoogle
+        client_id={
+          "591350337896-1l1gjhd6heqnm7d36181ihnq25uls2m4.apps.googleusercontent.com"
+        }
+        scope="openid profile email"
+        discoveryDocs="claims_supported"
+        access_type="offline"
+        onResolve={onResolveHandler}
+        onReject={(err) => {
+          console.log(err);
+        }}
+      >
+        <GoogleLoginButton />
+      </LoginSocialGoogle>
+    </Space>
   );
 }
 
 export default Login;
-

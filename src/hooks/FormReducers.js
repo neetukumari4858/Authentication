@@ -1,4 +1,4 @@
- const FormReducers = (state, action) => {
+const FormReducers = (state, action) => {
   switch (action.type) {
     case "SIGNUP_INPUT_TEXT":
       return {

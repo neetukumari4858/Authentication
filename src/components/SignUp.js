@@ -1,8 +1,8 @@
 import { useReducer } from "react";
+import { Button, Form, Input, Space } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 import { UseAddSignupData, FormReducers } from "./../hooks/index";
-import { Card } from "antd";
 
 function SignUp() {
   const initialState = {
@@ -17,15 +17,6 @@ function SignUp() {
 
   const { mutate: addUser } = UseAddSignupData();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const userType = "isSignedUser";
-
-    const signupObj = { id, name, password, email, userType };
-    addUser(signupObj);
-  };
-
   const handleTextChange = (e) => {
     dispatch({
       type: "SIGNUP_INPUT_TEXT",
@@ -33,62 +24,112 @@ function SignUp() {
       payload: e.target.value,
     });
   };
+
+  const onFinish = () => {
+    const userType = "isSignedUser";
+    const signupObj = { id, name, password, email, userType };
+    addUser(signupObj);
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
   return (
     <div className="signup_container">
-      <Card
-        hoverable
-        className="card"
+      <Form
+        labelCol={{
+          span: 8,
+        }}
+        wrapperCol={{
+          span: 16,
+        }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
       >
-        <h1>SignUp</h1>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>User Name</label>
-            <input
-              required
-              value={id}
-              name="id"
-              onChange={(e) => handleTextChange(e)}
-              placeholder="enter username"
-            />
-          </div>  
-          <div>
-            <label>Full Name</label>
-            <input
-              required
-              value={name}
-              name="name"
-              onChange={(e) => handleTextChange(e)}
-              placeholder="enter fullName"
-            />
-          </div>
-          <div>
-            <label>Email</label>
-            <input
-              required
-              value={email}
-              name="email"
-              onChange={(e) => handleTextChange(e)}
-              placeholder="enter email"
-            />
-          </div>
-          <div>
-            <label>Password</label>
-            <input
-              required
-              value={password}
-              name="password"
-              onChange={(e) => handleTextChange(e)}
-              placeholder="enter password"
-            />
-          </div>
-          <div className="button_container">
-            <button type="submit">Signup</button>
-            <button>
-              <Link to="/login">Login</Link>
-            </button>
-          </div>
-        </form>
-      </Card>
+        <h1>Sign up</h1>
+
+        <Form.Item
+          label="Username"
+          value={id}
+          name="id"
+          rules={[
+            {
+              required: true,
+              message: "Please input your username!",
+            },
+          ]}
+        >
+          <Input
+            value={id}
+            name="id"
+            placeholder="Enter your Username"
+            onChange={(e) => handleTextChange(e)}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Full Name"
+          value={name}
+          name="name"
+          rules={[
+            {
+              required: true,
+              message: "Please input your full name!",
+            },
+          ]}
+        >
+          <Input
+            value={name}
+            name="name"
+            placeholder="Enter your Fullname"
+            onChange={(e) => handleTextChange(e)}
+          />
+        </Form.Item>
+        <Form.Item
+          label="E-mail"
+          value={email}
+          name="email"
+          rules={[
+            {
+              required: true,
+              message: "Please input your email!",
+            },
+          ]}
+        >
+          <Input
+            value={email}
+            name="email"
+            placeholder="Enter your E-mail"
+            onChange={(e) => handleTextChange(e)}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Password"
+          value={password}
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
+        >
+          <Input.Password
+            value={password}
+            name="password"
+            placeholder="Enter your Password"
+            onChange={(e) => handleTextChange(e)}
+          />
+        </Form.Item>
+        <Space>
+          <Button type="primary" htmlType="submit">
+            Sign up
+          </Button>
+          <Button type="button">
+            <Link to="/login">Login</Link>
+          </Button>
+        </Space>
+      </Form>
     </div>
   );
 }
