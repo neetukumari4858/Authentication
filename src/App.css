@@ -1,17 +1,36 @@
 .App {
   text-align: center;
 }
-.signup_container {
-  display: flex;
-  justify-content: center;
-  margin: 3rem;
-}
-.button_container {
+
+.btn_container {
   display: flex;
   justify-content: center;
   margin: 1rem;
   gap: 1rem;
 }
+.signup_container,
 .login_container {
-  margin: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 5rem;
+}
+.btn_LoginWithGoogle {
+  width: 17rem;
+}
+.footer {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem;
+}
+.btn_signup,
+.btn_login {
+  width: 9rem;
+}
+.login_text,
+.signup_text {
+  text-decoration: underline;
+}
+.home_container{
+  margin: 2rem;
 }

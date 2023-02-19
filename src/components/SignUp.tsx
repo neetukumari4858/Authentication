@@ -1,6 +1,6 @@
-import { useReducer } from "react";
-import { Button, Form, Input, Space } from "antd";
 import React from "react";
+import { useReducer } from "react";
+import { Button, Form, Input } from "antd";
 import { Link } from "react-router-dom";
 import { UseAddSignupData, FormReducers } from "./../hooks/index";
 
@@ -17,7 +17,7 @@ function SignUp() {
 
   const { mutate: addUser } = UseAddSignupData();
 
-  const handleTextChange = (e) => {
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({
       type: "SIGNUP_INPUT_TEXT",
       field: e.target.name,
@@ -26,11 +26,11 @@ function SignUp() {
   };
 
   const onFinish = () => {
-    const userType = "isSignedUser";
+    const userType = "signup_user";
     const signupObj = { id, name, password, email, userType };
     addUser(signupObj);
   };
-  const onFinishFailed = (errorInfo) => {
+  const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
   return (
@@ -50,7 +50,6 @@ function SignUp() {
 
         <Form.Item
           label="Username"
-          value={id}
           name="id"
           rules={[
             {
@@ -68,7 +67,6 @@ function SignUp() {
         </Form.Item>
         <Form.Item
           label="Full Name"
-          value={name}
           name="name"
           rules={[
             {
@@ -86,7 +84,6 @@ function SignUp() {
         </Form.Item>
         <Form.Item
           label="E-mail"
-          value={email}
           name="email"
           rules={[
             {
@@ -105,7 +102,6 @@ function SignUp() {
 
         <Form.Item
           label="Password"
-          value={password}
           name="password"
           rules={[
             {
@@ -121,15 +117,14 @@ function SignUp() {
             onChange={(e) => handleTextChange(e)}
           />
         </Form.Item>
-        <Space>
-          <Button type="primary" htmlType="submit">
-            Sign up
-          </Button>
-          <Button type="button">
-            <Link to="/login">Login</Link>
-          </Button>
-        </Space>
+        <Button type="primary" htmlType="submit" className="btn_signup">
+          Sign up
+        </Button>
       </Form>
+      <div className="footer">
+        <p>Already have Account ?</p>
+        <Link to="/login" className="login_text">Login</Link>
+      </div>
     </div>
   );
 }

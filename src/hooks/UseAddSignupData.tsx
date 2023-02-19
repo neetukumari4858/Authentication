@@ -4,18 +4,18 @@ import { useHistory } from "react-router-dom";
 
 const UseAddSignupData = () => {
   const history = useHistory();
-  const AddSignupData = (user) => {
+  const AddSignupData = (user: any) => {
     const userType = user?.userType;
     const response = axios.post("http://localhost:8000/user", user, {
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(user),
+      data: JSON.stringify(user),
     });
     try {
-      if (userType === "isSignedUser") {
+      if (userType === "signup_user") {
         alert("Ragistered Successfully");
         history.push("/login");
       }
-    } catch (error) {
+    } catch (error:any) {
       alert("Failed :" + error.message);
     }
     return response;

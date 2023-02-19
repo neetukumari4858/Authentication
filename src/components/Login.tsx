@@ -1,9 +1,9 @@
-import { useEffect, useReducer } from "react";
+import { useReducer } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import { LoginSocialGoogle } from "reactjs-social-login";
 import { UseAddSignupData, FormReducers } from "./../hooks/index";
-import { Button, Form, Input, Space } from "antd";
+import { Button, Form, Input } from "antd";
 
 function Login() {
   const initialState = {
@@ -16,15 +16,13 @@ function Login() {
   const { userName, email, password } = state;
 
   const history = useHistory();
-
-  useEffect(() => {
-    localStorage.clear();
-  }, []);
+  console.log(history);
 
   const { mutate: addUser } = UseAddSignupData();
-  const onResolveHandler = ({ data }) => {
+  const onResolveHandler = ({ data }: any) => {
     let { name, email, id } = data;
     id = name;
+    const userType = "google_login";
     const username = name;
 
     fetch("http://localhost:8000/user/" + username)
@@ -33,7 +31,7 @@ function Login() {
       })
       .then((res) => {
         if (Object.keys(res).length === 0) {
-          const user = { name, id, email };
+          const user = { name, id, email, userType };
           addUser(user);
         }
         history.push("/");
@@ -41,7 +39,7 @@ function Login() {
       });
   };
 
-  const handleTextChange = (e) => {
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({
       type: "LOGIN_INPUT_TEXT",
       field: e.target.name,
@@ -59,7 +57,9 @@ function Login() {
         } else {
           if (password === res.password) {
             alert("you are Logged in successfuly");
-            localStorage.setItem("username", userName);
+            if (userName) {
+              localStorage.setItem("username", userName);
+            }
 
             history.push("/");
           } else {
@@ -72,18 +72,18 @@ function Login() {
       });
   };
 
-  const onFinishFailed = (errorInfo) => {
+  const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
 
   return (
-    <Space direction="vertical" size={12} className="login_container">
+    <div className="login_container">
       <Form
         labelCol={{
           span: 8,
         }}
         wrapperCol={{
-          span: 16,
+          span: 17,
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -93,7 +93,6 @@ function Login() {
 
         <Form.Item
           label="Username"
-          value={userName}
           name="userName"
           rules={[
             {
@@ -111,7 +110,6 @@ function Login() {
         </Form.Item>
         <Form.Item
           label="E-mail"
-          value={email}
           name="email"
           rules={[
             {
@@ -130,7 +128,6 @@ function Login() {
 
         <Form.Item
           label="Password"
-          value={password}
           name="password"
           rules={[
             {
@@ -146,15 +143,13 @@ function Login() {
             placeholder="Enter Password"
           />
         </Form.Item>
-        <Space>
-          <Button type="primary" htmlType="submit">
+        <div className="btn_container">
+          <Button type="primary" htmlType="submit" className="btn_login">
             Login
           </Button>
-          <Button type="button">
-            <Link to="/signup">Sign up</Link>
-          </Button>
-        </Space>
+        </div>
       </Form>
+      <h4>OR</h4>
       <LoginSocialGoogle
         client_id={
           "591350337896-1l1gjhd6heqnm7d36181ihnq25uls2m4.apps.googleusercontent.com"
@@ -166,10 +161,17 @@ function Login() {
         onReject={(err) => {
           console.log(err);
         }}
+        className="btn_LoginWithGoogle"
       >
         <GoogleLoginButton />
       </LoginSocialGoogle>
-    </Space>
+      <div className="footer">
+        <p>Don't have Account ?</p>
+        <Link to="/signup" className="signup_text">
+          Sign up
+        </Link>
+      </div>
+    </div>
   );
 }
 
