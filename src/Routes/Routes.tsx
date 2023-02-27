@@ -1,7 +1,8 @@
-import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Home, Login, SignUp } from "./components/index";
+import { SignUp } from "../pages/SignUp/index";
+import { Home } from "../pages/Home/index";
 import { QueryClientProvider, QueryClient } from "react-query";
+import { Login } from "../pages/Login/index";
 
 function Routes() {
   const queryClient = new QueryClient();
@@ -27,3 +28,4 @@ function Routes() {
 }
 
 export default Routes;
+

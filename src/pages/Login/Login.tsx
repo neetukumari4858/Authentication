@@ -1,81 +1,20 @@
-import { useReducer } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import { LoginSocialGoogle } from "reactjs-social-login";
-import { UseAddSignupData, FormReducers } from "./../hooks/index";
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
+import useLogin from "./useLogin-Controller";
+import { UseButton } from "../../Components/Button";
 
 function Login() {
-  const initialState = {
-    userName: "",
-    email: "",
-    password: "",
-  };
-
-  const [state, dispatch] = useReducer(FormReducers, initialState);
-  const { userName, email, password } = state;
-
-  const history = useHistory();
-  console.log(history);
-
-  const { mutate: addUser } = UseAddSignupData();
-  const onResolveHandler = ({ data }: any) => {
-    let { name, email, id } = data;
-    id = name;
-    const userType = "google_login";
-    const username = name;
-
-    fetch("http://localhost:8000/user/" + username)
-      .then((res) => {
-        return res.json();
-      })
-      .then((res) => {
-        if (Object.keys(res).length === 0) {
-          const user = { name, id, email, userType };
-          addUser(user);
-        }
-        history.push("/");
-        localStorage.setItem("username", id);
-      });
-  };
-
-  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: "LOGIN_INPUT_TEXT",
-      field: e.target.name,
-      payload: e.target.value,
-    });
-  };
-  const onFinish = () => {
-    fetch("http://localhost:8000/user/" + userName)
-      .then((res) => {
-        return res.json();
-      })
-      .then((res) => {
-        if (Object.keys(res).length === 0) {
-          alert("Please Enter the valid username");
-        } else {
-          if (password === res.password) {
-            alert("you are Logged in successfuly");
-            if (userName) {
-              localStorage.setItem("username", userName);
-            }
-
-            history.push("/");
-          } else {
-            alert("Please Enter the valid credentials");
-          }
-        }
-      })
-      .catch((error) => {
-        console.log(`Login Failed due to ${error.message}`);
-      });
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
-
+  const {
+    onResolveHandler,
+    handleTextChange,
+    onFinishFailed,
+    refetch,
+    userName,
+    email,
+    password,
+  } = useLogin();
   return (
     <div className="login_container">
       <Form
@@ -85,7 +24,7 @@ function Login() {
         wrapperCol={{
           span: 17,
         }}
-        onFinish={onFinish}
+        onFinish={refetch}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
@@ -144,9 +83,7 @@ function Login() {
           />
         </Form.Item>
         <div className="btn_container">
-          <Button type="primary" htmlType="submit" className="btn_login">
-            Login
-          </Button>
+          <UseButton btn_Class="btn_login" text="Login" />
         </div>
       </Form>
       <h4>OR</h4>

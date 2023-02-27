@@ -1,38 +1,19 @@
-import React from "react";
-import { useReducer } from "react";
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
 import { Link } from "react-router-dom";
-import { UseAddSignupData, FormReducers } from "./../hooks/index";
+import { UseButton } from "../../Components/Button/index";
+import { useSignup } from "./useSignup-Controller";
 
-function SignUp() {
-  const initialState = {
-    id: "",
-    name: "",
-    email: "",
-    password: "",
-  };
+const SignUp = () => {
+  const {
+    handleTextChange,
+    onFinish,
+    onFinishFailed,
+    id,
+    name,
+    email,
+    password,
+  } = useSignup();
 
-  const [state, dispatch] = useReducer(FormReducers, initialState);
-  const { id, name, email, password } = state;
-
-  const { mutate: addUser } = UseAddSignupData();
-
-  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: "SIGNUP_INPUT_TEXT",
-      field: e.target.name,
-      payload: e.target.value,
-    });
-  };
-
-  const onFinish = () => {
-    const userType = "signup_user";
-    const signupObj = { id, name, password, email, userType };
-    addUser(signupObj);
-  };
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
   return (
     <div className="signup_container">
       <Form
@@ -117,16 +98,16 @@ function SignUp() {
             onChange={(e) => handleTextChange(e)}
           />
         </Form.Item>
-        <Button type="primary" htmlType="submit" className="btn_signup">
-          Sign up
-        </Button>
+        <UseButton btn_Class="btn_signup" text="Sign up" />
       </Form>
       <div className="footer">
         <p>Already have Account ?</p>
-        <Link to="/login" className="login_text">Login</Link>
+        <Link to="/login" className="login_text">
+          Login
+        </Link>
       </div>
     </div>
   );
-}
+};
 
 export default SignUp;

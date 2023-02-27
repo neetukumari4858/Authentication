@@ -1,10 +1,11 @@
 {
   "user": [
     {
-      "name": "Neetu Kumari",
       "id": "Neetu Kumari",
-      "email": "neetu21@navgurukul.org",
-      "userType": "google_login"
+      "name": "dsf",
+      "password": "n",
+      "email": "ds",
+      "userType": "signup_user"
     }
   ]
 }
